@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.utils.translation import gettext as _
-import uuid
 
 from django.db import models
 from imagekit.models import ProcessedImageField, ImageSpecField
 from pilkit.processors import ResizeToFit, ResizeToFill
 
-from core.models import Gallery
+from core.models import Gallery, User
 from helpers import RandomFileName
+from rentals.models import City
 
 
-class City(models.Model):
+class Hotel(models.Model):
 
+    owner = models.ForeignKey(User, verbose_name=_('Responsable'), blank=True, null=True, related_name='hotels')
+    city = models.ForeignKey(City,verbose_name=_('Ciudad'), related_name='hotels')
     name = models.CharField(null=True, blank=True, verbose_name=_('Nombre'), max_length=250)
     description = models.TextField(null=True, blank=True, verbose_name=_('Descripción'))
+    address = models.TextField(null=True, blank=True, verbose_name=_('Dirección'))
     latitude = models.FloatField(null=False, verbose_name=_('Latitud'), default=0)
     longitude = models.FloatField(null=False, verbose_name=_('Longitud'), default=0)
     photo = ProcessedImageField(null=True, blank=True, upload_to=RandomFileName('cities/'),
@@ -28,8 +31,8 @@ class City(models.Model):
     gallery = models.OneToOneField(Gallery, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
-        verbose_name = _('Ciudad')
-        verbose_name_plural = _('Ciudades')
+        verbose_name = _('Hotel')
+        verbose_name_plural = _('Hoteles')
         ordering = ['name']
 
     def __unicode__(self):
