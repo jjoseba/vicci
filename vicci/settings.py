@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from django.utils.translation import gettext as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,6 +36,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'rentals',
     'core',
+    'jet',
     'imagekit',
     'ckeditor',
     'django.contrib.admin',
@@ -77,6 +79,33 @@ TEMPLATES = [
 WSGI_APPLICATION = 'vicci.wsgi.application'
 
 
+# Jet admin configs
+
+JET_SIDE_MENU_COMPACT = True
+JET_CHANGE_FORM_SIBLING_LINKS = False
+JET_SIDE_MENU_ITEMS = [  # A list of application or custom item dicts
+    {'label': 'General', 'items': [
+        {'name': 'core.user'},
+        {'name': 'rentals.city'},
+        {'name': 'rentals.hotel'},
+    ]},
+    {'label': 'Seguridad', 'items': [
+        {'name': 'auth.group'},
+        {'name': 'auth.permission'},
+    ]},
+]
+JET_THEMES = [
+    {
+        'theme': 'default', # theme folder name
+        'color': '#47bac1', # color of the theme's button in user menu
+        'title': 'Default' # theme title
+    },
+    {
+        'theme': 'vicci',
+        'color': '#ff0000',
+        'title': 'Vicci'
+    }
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
