@@ -18,8 +18,12 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 
+from rentals import urls as rentals_urls
+from core import urls as core_urls
 
 urlpatterns = [
+    url(r'^', include(core_urls)),
+    url(r'^', include(rentals_urls)),
     url(r'^jet/', include('jet.urls', 'jet')),
     url(r'^admin/', admin.site.urls),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

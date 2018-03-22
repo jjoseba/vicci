@@ -96,13 +96,8 @@ JET_SIDE_MENU_ITEMS = [  # A list of application or custom item dicts
 ]
 JET_THEMES = [
     {
-        'theme': 'default', # theme folder name
-        'color': '#47bac1', # color of the theme's button in user menu
-        'title': 'Default' # theme title
-    },
-    {
         'theme': 'vicci',
-        'color': '#ff0000',
+        'color': '#cf821c',
         'title': 'Vicci'
     }
 ]

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+from django.utils.text import slugify
 from django.utils.translation import gettext as _
 
 from django.db import models
@@ -13,7 +15,7 @@ from rentals.models import City
 
 class Hotel(models.Model):
 
-    owner = models.ForeignKey(User, verbose_name=_('Responsable'), blank=True, null=True, related_name='hotels')
+    owner = models.ForeignKey(User, verbose_name=_('Responsable'), blank=True, null=True, related_name='owned_hotels')
     city = models.ForeignKey(City,verbose_name=_('Ciudad'), related_name='hotels')
     name = models.CharField(null=True, blank=True, verbose_name=_('Nombre'), max_length=250)
     description = models.TextField(null=True, blank=True, verbose_name=_('Descripción'))
@@ -35,5 +37,9 @@ class Hotel(models.Model):
         verbose_name_plural = _('Hoteles')
         ordering = ['name']
 
+    @property
+    def slug(self):
+        return slugify(str(self))
+
     def __unicode__(self):
-        return self.name
+        return self.city.name + ' | ' + self.name

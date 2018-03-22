@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}{{hotel.name}}{% endblock %}
+
+{% block bodyattrs %}  {% endblock%}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/material.timepicker.css' %}" />
+{% endblock extra_styles %}
+
+{% block content %}
+
+<header class="jumbo-header py-4" {%if hotel.photo %}style="background-image: url('{{hotel.photo.url}}');"{%endif%}>
+    <div class="container">
+        <h1>Reservar</h1>
+        <h3 class="mb-0">{{hotel.name}}</h3>
+    </div>
+</header>
+<div class="container">
+
+   <div class="stepper-horiz">
+      <div class="stepper done" data-toggle="tooltip" data-placement="bottom" title="Lugar">
+        <div class="stepper-icon" >
+          <i class="material-icons">check</i>
+        </div>
+      </div>
+      <div class="stepper active" data-toggle="tooltip" data-placement="bottom" title="Seleccionar fecha">
+        <div class="stepper-icon" >
+          <i class="material-icons">event</i>
+        </div>
+      </div>
+      <div class="stepper" data-toggle="tooltip" data-placement="bottom" title="Pago">
+        <div class="stepper-icon" >
+          <i class="material-icons">payment</i>
+        </div>
+      </div>
+</div>
+
+    <label for="exampleInputDatePicker1">Selecciona el día:</label>
+<input class="form-control" id="exampleInputDatePicker1" placeholder="Fecha" type="text">
+
+
+    <div class="form-group mt-4">
+
+        <label for="hour-input">Hora de recogida</label>
+        <input class="form-control" id="hour-input" placeholder="Hora de recogida" type="text">
+
+    </div>
+<div class="text-center mt-4">
+    <h4>Tiempo</h4>
+    <div class="btn-group" data-toggle="buttons" role="group">
+      <label class="btn btn-outline btn-lg active">
+        <input autocomplete="off" name="options1" type="radio">
+        2 horas<br><span class="small mt-2 d-block"> 10€</span>
+      </label>
+      <label class="btn btn-outline btn-lg">
+        <input autocomplete="off" name="options1" type="radio">
+        5 horas<br><span class="small mt-2 d-block"> 10€</span>
+      </label>
+      <label class="btn btn-outline btn-lg">
+        <input autocomplete="off" name="options1" type="radio">
+        10 horas<br><span class="small mt-2 d-block"> 10€</span>
+      </label>
+    </div>
+    <br><br><br>
+    <button type="submit" class="btn btn-primary btn-lg">Reservar</button>
+</div>
+
+<br><br><br><br><br><br>
+</div>
+
+
+<div class="modal show-at-load">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">¿Eres huésped del hotel?</h5>
+      </div>
+      <div class="modal-body">
+        <p class="text-black-secondary typography-subheading">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. </p>
+
+          <div class="custom-control custom-switch">
+          <input class="custom-control-input" id="customSwitch" type="checkbox">
+          <span class="custom-control-track"></span>
+          <label class="custom-control-label" for="customSwitch">Soy huésped</label>
+        </div>
+
+
+<input type="text" id="inputPassword5" class="form-control" placeholder="Número de habitación" aria-describedby="passwordHelpBlock">
+<small id="passwordHelpBlock" class="form-text text-muted">
+  Si sabes tu número de habitación, puedes incluirlo de cara a blablablabla
+</small>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-dismiss="modal" type="button">Omitir este paso</button>
+        <button class="btn btn-outline" data-dismiss="modal" type="button">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/material.timepicker.js' %}"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#exampleInputDatePicker1').pickdate();
+
+    var timepicker = new TimePicker.TimePicker();
+    timepicker.bindInput('#hour-input');
+    });
+</script>
+
+{% endblock scripts %}

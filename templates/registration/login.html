@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block title %}Login{% endblock %}
 
-{% block bodyattrs %} id="login-page"{% endblock%}
+{% block bodyattrs %} id="login-page" class="main-bg" {% endblock%}
 
 {% block content %}
 
-<div class="jumbo-header minimal" >
-    <div class="jumbotron">
-        <div class="container text-center">
-            <h1>Entrar</h1>
-        </div>
+<header class="jumbo-header" style="background-image: url('{% static 'imgs/sei-bg.jpg' %}');">
+    <div class="container text-center">
+        <h1>Sei ViCCi</h1>
     </div>
-</div>
+
+</header>
 
 <div class="container justify-content-center">
     <div class="card px-5" style="max-width:500px;margin:auto;margin-top:-20px;">
@@ -39,7 +39,6 @@
             </div>
             {% endif %}
         </div>
-        <br>
 
       {% if form.non_field_errors %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -51,10 +50,18 @@
       {% endif %}
 
       <p class="text-center">
-
-          <button type="submit" class="btn btn-primary btn-lg">Entrar</button>
-
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Entrar</button>
+          <a href="#" class="mt-2 text-muted d-block">¿Olvidaste tu contraseña?</a>
       </p>
+
+
+      <hr class="my-4">
+
+
+      <h4 class="text-center" style="font-weight: lighter;">¿Aún no tienes un usuario? </h4>
+        <div class="text-center">
+            <a href="{%url 'register' %}" class="btn btn-secondary btn-block btn-lg">Regístrate</a>
+        </div>
       <!--<a href="#"  class="btn btn-lg">Olvidé mi contraseña</a>-->
 
 

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import formset_factory
 
-from currency.models import GalleryPhoto
+from core.models import GalleryPhoto
 
 
 class PhotoGalleryForm(forms.ModelForm):

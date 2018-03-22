@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}{{hotel.name}}{% endblock %}
+
+{% block bodyattrs %}  {% endblock%}
+
+{% block content %}
+
+<header class="jumbo-header" {%if hotel.photo %}style="background-image: url('{{hotel.photo.url}}');"{%endif%}>
+    <div class="container">
+        <h1>{{hotel.name}}</h1>
+        <h3 class="mb-0">{{hotel.address}}</h3>
+    </div>
+</header>
+<div class="container">
+
+    <div class="text-center row">
+        <div class="col-6">
+            <a href="{%url 'hotel_book' pk=hotel.pk %}" class="btn btn-primary btn-action btn-lg"><i class="material-icons">directions_bike</i></a>
+            <h4>Reservar ahora</h4>
+        </div>
+
+        <div class="col-6">
+            <a href="#" class="btn btn-primary btn-action btn-lg"><i class="material-icons">near_me</i></a>
+            <h4>Ver momentos</h4>
+        </div>
+    </div>
+
+    <hr>
+    <div class="row mt-4">
+        <div class="col-md-7 mb-4">
+            <p>
+                {{hotel.description|safe}}
+            </p>
+        </div>
+        <div class="col-md-5">
+            {% include 'common/gallery.html' with gallery=gallery%}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
