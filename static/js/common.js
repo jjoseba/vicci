@@ -1,7 +1,11 @@
+
+var TOAST_DELAY = 1200;
+
 $(function(){
     
     var menu = $('#navbar-menu');
 
+    $('.floating-label .form-control').floatinglabel();
     $('.show-at-load').modal('show');
     $('.datepicker').pickdate();
 
@@ -41,5 +45,20 @@ $(function(){
 		}
 	});
 
+	var toastCounter = 1;
+    $($('.toast-messages .toast').get().reverse()).each(function(){
+        var message = $(this);
+        setTimeout(function(){ message.fadeOut(); }, TOAST_DELAY * toastCounter);
+        toastCounter++;
+    });
 
 });
+
+
+
+function showToast(message, messageClasses){
+    var toast = $('<div class="toast"></div>').text(message).addClass(messageClasses);
+    toast.appendTo('#main-toasts');
+    setTimeout(function(){ toast.fadeOut(); }, TOAST_DELAY);
+}
+

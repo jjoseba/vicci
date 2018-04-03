@@ -141,9 +141,11 @@ MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/seivicci/'
 
 TASTYPIE_DEFAULT_FORMATS = ['json']
 
+EMAIL_SEND_FROM = 'noreply@vicci.com'
 
 CKEDITOR_CONFIGS = {
     'default': {
