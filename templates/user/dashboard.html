@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Sei ViCCi{% endblock %}
 
 {% block bodyattrs %} {% endblock%}
 
@@ -20,7 +20,7 @@
 <ul class="list-group" style="max-width:520px;margin:auto;margin-top:-60px;">
     <a class="list-group-item list-group-item-action " href="{% url 'edit_profile' %}"><i class="material-icons mr-3">account_circle</i> Mi perfil de usuario</a>
     <a class="list-group-item list-group-item-action " href="{% url 'profile_password' %}"><i class="material-icons mr-3">vpn_key</i> Actualizar contraseña</a>
-    <a class="list-group-item list-group-item-action" href="#"><i class="material-icons mr-3">update</i> Mis reservas</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'user_rentals' %}"><i class="material-icons mr-3">update</i> Mis reservas</a>
     <a class="list-group-item list-group-item-action" href="{% url 'logout' %}"><i class="material-icons mr-3">exit_to_app</i>  Desconectar </a>
 </ul>
 

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Mis Reservas{% endblock %}
+
+{% block bodyattrs %} class="softbg"{% endblock%}
+
+{% block content %}
+
+<header class="jumbo-header py-5" style="background-image: url('{% static 'imgs/sei-bg.jpg' %}');">
+    <div class="container text-center">
+        <h1>Mis reservas</h1>
+        <br>
+    </div>
+
+</header>
+
+<div class="card">
+    <div class="card-body">
+        <div class="container py-4">
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+
+
+<div class="table-responsive mb-4">
+<table class="table table-hover" {% if ajax_url %} data-ajax-url="{{ajax_url}}" {% endif %}>
+  <thead>
+    <tr>
+      <th scope="col">Ciudad</th>
+      <th scope="col">Hotel</th>
+      <th scope="col">Fecha</th>
+      <th scope="col">Hora</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for rental in rentals %}
+    <tr data-id="{{user.pk}}">
+      <td class="entity-td">
+          <div class="profile-circle small">
+              {% if entity.logo %} <img src="{{entity.logo_thumbnail.url}}"> {%endif%}
+          </div>
+
+          <h5 class="mb-0">{{entity.name}}</h5>
+          {{entity.address}}
+        </td>
+        <td>{{ entity.max_percent_payment }} %</td>
+        <td>{{ entity.bonus_percent_general }} %</td>
+        <td class="table-actions">
+            <a class="btn btn-outline-primary" href="{% url 'entity_detail' entity.pk %}"  data-toggle="tooltip" data-placement="bottom" title="Ver detalle"><i class="material-icons">visibility</i></a>
+            <a class="btn btn-outline-primary" href="{% url 'entity_edit' entity.pk %}" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="material-icons">mode_edit</i></a>
+            <!--<a class="btn btn-outline-primary" href="{% url 'entity_offers' entity.pk %}"  data-toggle="tooltip" data-placement="bottom" title="Ver ofertas"><i class="material-icons">shopping_basket</i></a>-->
+        </td>
+
+    </tr>
+{% empty %}
+    <tr>
+      <td colspan="4">Aún no has realizado ninguna reserva...</td>
+    </tr>
+
+{% endfor %}
+      </tbody>
+</table>
+</div>
+
+
+
+</div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -18,7 +18,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        exclude = []
+        fields = ("username", 'email', 'birth_date', 'phone_number', 'first_name', 'last_name')
 
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
@@ -40,9 +40,9 @@ class SignUpForm(UserCreationForm):
         birth_date = self.cleaned_data['birth_date']
 
         adulthood = datetime.date.today() - relativedelta(years=+18)
-        print adulthood
-        print birth_date
+
         if birth_date > adulthood:
-            self.add_error('birth_date', u'Hay que ser mayor de edad para utilizar ViCCi')
+            pass
+            # self.add_error('birth_date', u'Hay que ser mayor de edad para utilizar ViCCi')
 
         return birth_date

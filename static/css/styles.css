@@ -296,8 +296,7 @@ footer a, footer a:hover{
   transition-delay: 0, .2s;
 }
 
-
-.card{
+.softbg{
     background-color:#f1ecec;
 }
 
@@ -347,3 +346,6 @@ footer a, footer a:hover{
     margin-bottom:1em;
     border-radius:2rem;
 }
+
+.nav-tabs .nav-link.active{ color:#cf821c; }
+.nav-tabs .nav-link::before, .nav-tabs-material .nav-tabs-indicator { background-color:#cf821c;}

@@ -44,3 +44,11 @@ def dashboard(request):
     return render(request, 'user/dashboard.html', {
 
     })
+
+
+@login_required
+def user_rentals(request):
+
+    return render(request, 'rentals/user_list.html', {
+
+    })

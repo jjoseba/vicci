@@ -26,6 +26,8 @@ def register(request):
 
             login(request, user)
             return redirect('dashboard')
+        else:
+            print form.errors
 
     return render(request, 'registration/signup.html', {'form': form})
 
