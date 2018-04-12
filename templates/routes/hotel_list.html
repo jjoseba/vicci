@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}{{hotel.name}}{% endblock %}
+
+{% block bodyattrs %}  {% endblock%}
+
+{% block content %}
+
+<header class="jumbo-header" {%if hotel.photo %}style="background-image: url('{{hotel.photo.url}}');"{%endif%}>
+    <div class="container">
+        <h1>{{hotel.name}}</h1>
+        <h3 class="mb-0">Momenti by ViCCi</h3>
+    </div>
+</header>
+<div class="container mt-4">
+
+    {% for route in routes %}
+        <div class="col-sm-6">
+            <div class="card">
+              <img class="card-img-top" src="{{route.photo.url}}" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">{{route.name}}</h5>
+                <p class="card-text">{{route.description}}</p>
+                <div class="text-center"> <a href="{% url 'route_detail' route.pk %}" class="btn btn-primary">Ver momento</a></div>
+              </div>
+            </div>
+        </div>
+
+    {% endfor %}
+
+
+</div>
+
+
+{% endblock %}

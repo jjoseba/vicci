@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'routes',
     'rentals',
     'core',
     'jet',
@@ -88,6 +89,12 @@ JET_SIDE_MENU_ITEMS = [  # A list of application or custom item dicts
         {'name': 'core.user'},
         {'name': 'rentals.city'},
         {'name': 'rentals.hotel'},
+    ]},
+    {'label': 'Rutas', 'items': [
+        {'name': 'routes.category'},
+        {'name': 'routes.routepoint'},
+        {'name': 'routes.hotelroute'},
+        {'name': 'routes.hotelroutepoint'},
     ]},
     {'label': 'Seguridad', 'items': [
         {'name': 'auth.group'},

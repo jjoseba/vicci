@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load settings_value %}
+{% load l10n %}
+{% block title %}{{hotel.name}}{% endblock %}
+
+{% block bodyattrs %}  {% endblock%}
+
+{% block content %}
+
+<div class="route-actions d-none d-lg-block">
+    <a href="{%url 'hotel_book' pk=route.hotel.pk %}" class="btn btn-primary btn-action" data-toggle="tooltip" data-placement="bottom" title="Reservar bici"><i class="material-icons">directions_bike</i></a>
+</div>
+
+<div class="route-list">
+    <div class="route-description">
+        <h2>{{route.name}}</h2>
+    <p>{{route.description}}</p>
+    </div>
+
+    <div class="text-right d-lg-none pr-4">
+         <a href="{%url 'hotel_book' pk=route.hotel.pk %}" class="btn btn-primary btn-action" data-toggle="tooltip" data-placement="bottom" title="Reservar bici"><i class="material-icons">directions_bike</i></a>
+
+    </div>
+
+    <div id="accordion">
+        {% for point in route_points %}
+      <div class="">
+        <div class="route-point" id="routepoint-heading-{{forloop.counter}}">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#routepoint-{{forloop.counter}}" aria-expanded="true" aria-controls="collapseOne">
+              {{point.route_point.name}}
+            </button>
+          </h5>
+        </div>
+
+        <div id="routepoint-{{forloop.counter}}" class="collapse" aria-labelledby="#routepoint-heading-{{forloop.counter}}" data-parent="#accordion">
+            <img src="{{point.route_point.photo.url}}" class="img-fluid">
+          <div class="card-body">
+            {{point.route_point.description|linebreaks}}
+          </div>
+        </div>
+      </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<div class="map-route" id="map">
+
+</div>
+
+
+<div class="infowindow_base hidden">
+    <a class="infowindow">
+        <div class="profile-circle card">
+            <img src="">
+        </div>
+        <span class="title"></span>
+        <span class="address"></span>
+    </a>
+</div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+{% include 'common/include_gmaps.html' %}
+
+<script type="text/javascript">
+    var venue_dialog = $('#venue-dialog');
+    var map_canvas = $('#map');
+
+    var infoWindow_base = $('.infowindow_base');
+    var prev_infowindow = false;
+
+
+
+    function initMap() {
+
+            map = new google.maps.Map(map_canvas[0], {
+                zoomControl: true,
+                scaleControl: false,
+                streetViewControl: false,
+                scaleControl:false,
+                styles: vicciMapStyle,
+                mapTypeControl:false
+            });
+            map_canvas.removeClass('loading-container');
+
+            var bounds = new google.maps.LatLngBounds();
+
+            var directionsService = new google.maps.DirectionsService;
+           var directionsDisplay = new google.maps.DirectionsRenderer({
+    polylineOptions: {
+      strokeColor: "#cf821c"
+    }
+  });
+           directionsDisplay.setMap(map);
+
+            var hotelPosition = new google.maps.LatLng({{ route.hotel.latitude|unlocalize }}, {{route.hotel.longitude|unlocalize }});
+
+              windowContentHotel = infoWindow_base.clone()
+                                .find('.title').text('{{ route.hotel.name }}').end()
+                                .find('.address').text('').end()
+
+            var hotelImage = '{{route.hotel.photo.url}}';
+
+              // A new Info Window is created and set content
+              var infowindow = new google.maps.InfoWindow({
+                content: windowContentHotel.html(),
+                maxWidth: 350
+              });
+
+
+              var marker = new RichMarker({
+                  position: hotelPosition,
+                  map: map,
+                  content: '<div class="marker-wrapper"><div class="marker"><img src="{{route.hotel.photo.url}}"></div></div>'
+                });
+
+                //extend the bounds to include each marker's position
+                bounds.extend(marker.position);
+
+            var waypoints = [];
+
+            {% for point in route_points %}
+
+              var venuePosition{{forloop.counter}} = new google.maps.LatLng({{ point.route_point.latitude|unlocalize }}, {{ point.route_point.longitude|unlocalize }});
+              var image{{forloop.counter}} = "{{point.route_point.photo.url}}";
+
+              waypoints.push({ 'location': venuePosition{{forloop.counter}}, 'stopover':true} );
+
+              windowContent{{forloop.counter}} = infoWindow_base.clone()
+                                .find('.title').text('{{ point.route_point.name }}').end()
+                                .find('.address').text('').end()
+                                .find('img').attr('src', image{{forloop.counter}}).end()
+
+
+              // A new Info Window is created and set content
+              var infowindow = new google.maps.InfoWindow({
+                content: windowContent{{forloop.counter}}.html(),
+                maxWidth: 350
+              });
+
+
+              var marker = new RichMarker({
+                  position: venuePosition{{forloop.counter}},
+                  map: map,
+                  content: '<div class="marker-wrapper"><div class="marker"><img src="' + image{{forloop.counter}} + '"></div></div>'
+                });
+
+                //extend the bounds to include each marker's position
+                bounds.extend(marker.position);
+
+              google.maps.event.addListener(marker, 'click', (function(marker,infowindow){
+                    return function() {
+                        if( prev_infowindow ) {
+                           prev_infowindow.close();
+                        }
+                        prev_infowindow = infowindow;
+                        infowindow.open(map,marker);
+                    };
+                })(marker,infowindow));
+
+            {% endfor %}
+
+            map.fitBounds(bounds);
+
+            directionsService.route({
+               origin:hotelPosition,
+               destination: hotelPosition,
+                waypoints: waypoints,
+                optimizeWaypoints: true,
+                travelMode: 'BICYCLING'
+            }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+
+            //now fit the map to the newly inclusive bounds
+
+
+      }
+</script>
+{% endblock scripts %}

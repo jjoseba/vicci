@@ -92,6 +92,7 @@ h1,h2,h3,h4{
     margin-top:-35px;
 }
 .btn-action i{ font-size:40px;}
+.btn-action img{ margin-top:-3px; margin-left:-5px;}
 .city-dialog .dialog-aside p{
 		font-size: 0.9em;
 		text-align: justify;
@@ -159,6 +160,13 @@ h1,h2,h3,h4{
 #mainmenu .navbar-brand img{
 	max-height: 100%;
 }
+
+.modal-body{
+    background-position:center;
+    background-size:cover;
+
+}
+
 #mainmenu .collapse-brand{ display: none; }
 @media (max-width: 992px){
 
@@ -295,7 +303,9 @@ footer a, footer a:hover{
   transform: rotate(-45deg);
   transition-delay: 0, .2s;
 }
-
+.modal{
+    z-index:4000;
+}
 .softbg{
     background-color:#f1ecec;
 }
@@ -315,6 +325,10 @@ footer a, footer a:hover{
 .picker-day-today, .btn-outline-primary{ color: #361f17; }
 .picker-day.picker-day-selected{
     background-color:#cf821c;
+}
+
+.modal-footer .btn-primary, .modal-footer .btn-primary:active, .modal-footer .btn-primary:focus, .modal-footer .btn-primary:hover{
+    color: #cf821c;
 }
 
 .custom-switch .custom-control-input:checked ~ .custom-control-track {
@@ -349,3 +363,141 @@ footer a, footer a:hover{
 
 .nav-tabs .nav-link.active{ color:#cf821c; }
 .nav-tabs .nav-link::before, .nav-tabs-material .nav-tabs-indicator { background-color:#cf821c;}
+
+ .route-list{
+    padding-top:25px;
+
+ }
+ .route-list .route-description{
+    margin:0.1rem 2rem;
+ }
+
+.map-route{
+    width:100%;
+    min-height:60vh;
+    background-color:#cacaca;
+}
+
+@media (min-width: 990px){
+    .route-list{
+        padding-top:90px;
+        background-color:#fff;
+        height:100%;
+        position:fixed;
+        top:0;
+        left:0;
+        width:460px;
+        overflow-y:auto;
+    }
+
+    .map-route{
+        position:absolute;
+        height:100%;
+        width:auto;
+        left:460px;
+        right:0;
+        top:0;
+    }
+
+    .route-actions{
+        position:fixed;
+        z-index:500;
+        top: 115px;
+        left:460px;
+        margin-left:-50px;
+    }
+}
+
+
+
+
+.route-point{
+    padding:1rem;
+    border-bottom:1px solid #ddd;
+}
+.route-point button{
+    color: #361f17;
+}
+
+.marker-wrapper{
+    position:absolute;
+}
+.marker-wrapper:before{
+    width: 0;
+    height: 0;
+    content:'';
+    border-color: inherit;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 14px solid;
+    position:absolute;
+    top:-10px;
+    left:-9px;
+    z-index:5;
+
+}
+.marker{
+    height:50px;
+    width:50px;
+    border:2px solid #333;
+    border-color:inherit;
+    border-radius:100%;
+    position:absolute;
+    overflow:hidden;
+    text-align:center;
+    background-color:#ddd;
+    margin-left:-25px;
+    margin-top:-62px;
+    box-shadow: 0 3px 4px rgba(0,0,0,0.4);
+}
+.marker img{
+    display: inline;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+}
+
+.infowindow .profile-circle{
+    position:absolute;
+    left:0;
+    top:0;
+    height:45px;
+    width:45px;
+}
+.infowindow:hover{
+    text-decoration:none;
+}
+.infowindow{
+    font-weight: 500;
+    color:#347289;
+    font-size:15px;
+    font-family: 'Oswald', Helvetica, Arial, Lucida, sans-serif;
+    text-transform: uppercase;
+}
+.infowindow .title, .infowindow .address, .infowindow span{
+    display:block;
+    padding-left:55px;
+}
+.infowindow .title{
+    color:#222;
+    font-size:18px;
+}
+.infowindow .address{
+    color:#777;
+    font-weight: 500;
+    min-height:20px;
+}
+
+
+
+*::-webkit-scrollbar {
+    width: 0.6em;
+}
+
+*::-webkit-scrollbar-track {
+    background-color:#ccc;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #eee;
+}
