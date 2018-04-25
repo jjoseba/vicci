@@ -26,7 +26,6 @@ class ProfileForm(forms.ModelForm):
 
         adulthood = datetime.date.today() - relativedelta(years=+18)
         if birth_date and birth_date > adulthood:
-            print 'aaaaa'
             self.add_error('birth_date', u'Hay que ser mayor de edad para utilizar ViCCi')
 
         return birth_date

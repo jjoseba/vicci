@@ -11,7 +11,7 @@ from routes.models import HotelRoute, HotelRoutePoint
 
 def hotel_routes(request, pk, slug=None):
     hotel = get_object_or_404(Hotel, pk=pk)
-    routes = HotelRoute.objects.all()
+    routes = HotelRoute.objects.filter(hotel=hotel)
 
     if not hotel.gallery:
         hotel.gallery = Gallery.objects.create()
