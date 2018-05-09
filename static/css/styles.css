@@ -149,7 +149,7 @@ h1,h2,h3,h4{
 	}
 }
 
-#main-content{ margin-top: 3.5rem; }
+#main-content{ margin-top: 3.5rem; min-height:70vh; }
 
 
 @media (min-width: 992px){
@@ -455,6 +455,9 @@ footer a, footer a:hover{
  }
  .btn-primary, .btn-primary.active, .btn-primary:active {
     background-color: #361f17;
+    color: #efb62f;
+}
+.btn-flat-primary, .btn-flat-primary:active, .btn-flat-primary:focus, .btn-flat-primary:hover, .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary:focus, .btn-outline-primary:hover{
     color: #efb62f;
 }
 .stepper{     padding: 2.2rem 1.5rem;}

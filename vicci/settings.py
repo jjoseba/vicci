@@ -89,6 +89,7 @@ JET_SIDE_MENU_ITEMS = [  # A list of application or custom item dicts
         {'name': 'core.user'},
         {'name': 'rentals.city'},
         {'name': 'rentals.hotel'},
+        {'name': 'rentals.rental'},
     ]},
     {'label': 'Rutas', 'items': [
         {'name': 'routes.category'},

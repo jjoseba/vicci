@@ -13,4 +13,7 @@ class HotelAdmin(admin.ModelAdmin):
 
 admin.site.register( Hotel, HotelAdmin)
 
-admin.site.register(Rental)
+class RentalAdmin(admin.ModelAdmin):
+    list_filter = ('hotel', 'day', 'status')
+
+admin.site.register(Rental, RentalAdmin)

@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from core.forms.galleryform import PhotoGalleryForm
 from core.models import Gallery
 from rentals.forms.hotel import HotelForm
-from rentals.models import City, Hotel
+from rentals.models import City, Hotel, Rental
 
 
 def cities_list(request):
@@ -64,8 +64,13 @@ def hotel_owner_rentals(request):
 
 @login_required
 def hotel_rentals(request, pk):
+    hotel = get_object_or_404(Hotel, pk=pk)
+    rentals = Rental.objects.filter(hotel=hotel)
+
     return render(request, 'rentals/hotel_list.html', {
-})
+        'rentals':rentals,
+        'manage_rentals':True
+    })
 
 
 @login_required

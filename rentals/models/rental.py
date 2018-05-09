@@ -16,10 +16,14 @@ from rentals.models import City, Hotel
 STATUS_ACCEPTED = 'accepted'
 STATUS_CANCELLED = 'cancelled'
 STATUS_OVERDUE = 'overdue'
+STATUS_CHECKIN = 'checkin'
+STATUS_CHECKOUT = 'checkout'
 PAYMENT_STATUS = (
     (STATUS_ACCEPTED, 'Aceptado'),
     (STATUS_CANCELLED, 'Cancelado'),
     (STATUS_OVERDUE, 'Pasado'),
+    (STATUS_CHECKIN, 'Retirada'),
+    (STATUS_CHECKOUT, 'Devuelta'),
 )
 
 class Rental(models.Model):
@@ -32,7 +36,7 @@ class Rental(models.Model):
     day = models.DateField(verbose_name=_('Dia de reserva'))
     time = models.TimeField(verbose_name=_('Hora de recogida'))
     duration = models.DurationField(default=0, verbose_name=_('Duración'))
-    status = models.CharField(max_length=12, choices=PAYMENT_STATUS)
+    status = models.CharField(max_length=12, choices=PAYMENT_STATUS, verbose_name=_('Estado'))
     total_amount = models.FloatField(default=0, verbose_name='Importe total')
 
 
@@ -43,4 +47,4 @@ class Rental(models.Model):
 
 
     def __unicode__(self):
-        return str(self.hotel) + ' - ' + str(self.day)
+        return self.hotel.name + ' | ' + str(self.day) + ' - ' + str(self.time)
