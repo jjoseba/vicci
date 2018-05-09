@@ -555,7 +555,7 @@ footer a, footer a:hover{
     border-bottom:1px solid #ddd;
     position:relative;
 }
-.route-point button, .route-point button:hover{
+.action-bar button{
     border-radius:50%;
     width:38px;
     height:40px;
@@ -563,6 +563,9 @@ footer a, footer a:hover{
     text-align:center;
     padding:0;
     display:inline-block;
+    color:#555;
+}
+.route-point button, .route-point button:hover{
     color:#cf821c;
 }
 .route-point h5{
@@ -574,10 +577,11 @@ display:block;
     font-weight:bold;
     margin-top:-0.2rem;
 }
-.route-point .description{
+.action-bar{ position:relative; }
+.action-bar .description{
     padding-right:120px;
 }
-.route-point .actions{
+.action-bar .actions{
     position:absolute;
     top:5px;
     right:10px;

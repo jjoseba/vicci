@@ -63,7 +63,7 @@ def hotel_owner_rentals(request):
     return redirect('hotel_rentals', pk=hotel.pk)
 
 @login_required
-def hotel_rentals(request):
+def hotel_rentals(request, pk):
     return render(request, 'rentals/hotel_list.html', {
 })
 

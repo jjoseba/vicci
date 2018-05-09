@@ -31,7 +31,7 @@
           </li>
 
              <li class="nav-item">
-            <a class="nav-link " href="#">
+            <a class="nav-link {% if request.resolver_match.url_name == 'hotel_owner_rentals' or can_edit_rentals %} active {% endif %}" href="{% url 'hotel_owner_rentals' %}">
               <i class="material-icons mr-3">directions_bike</i>
               Reservas
             </a>

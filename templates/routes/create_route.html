@@ -36,13 +36,34 @@
         </div>
     </dív>
 
-    <div class="bg-light py-2 px-3">
+    <div class="bg-light py-2 px-3 action-bar">
+
         <h4 class="mb-0">Micromomentos disponibles</h4>
+        <div class="actions">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    <i class="material-icons">filter_list</i>
+  </button>
+        </div>
+
+        <div class="collapse" id="collapseExample">
+          <div class="py-2">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" id="customRadioN" name="filter_points" value="all" class="custom-control-input" checked>
+                      <label class="custom-control-label" for="customRadioN">Todos</label>
+                    </div>
+                  {% for cat in categories %}
+                  <div class="custom-control custom-radio">
+                      <input type="radio" id="customRadio{{forloop.counter}}" name="filter_points" value="{{cat.pk}}" class="custom-control-input">
+                      <label class="custom-control-label" for="customRadio{{forloop.counter}}">{{cat}}</label>
+                    </div>
+                  {% endfor %}
+          </div>
+        </div>
     </div>
     <div id="accordion-points" class="points-list">
         {% for route_point in route_points %}
       <div class="">
-        <div class="route-point" id="routepoint-heading-{{forloop.counter}}" data-pk="{{route_point.pk}}" >
+        <div class="route-point action-bar" id="routepoint-heading-{{forloop.counter}}" data-pk="{{route_point.pk}}" data-category="{{route_point.category.pk}}">
           <h5 class="mb-0">
               <div class="description">
                   <div class="title">{{route_point.name}}</div>
@@ -113,6 +134,8 @@
     var summary = $('#route-summary');
     var calculateBtn = $('#calculate-route');
 
+
+
     function initMap() {
 
             function routeChange(){
@@ -181,6 +204,18 @@
 
             var accordion = $('#accordion-points');
             var selected = $('#selected-points');
+
+
+            $('input[name="filter_points"]').on('change', function(){
+                filter = $(this).val();
+                console.log($(this).val());
+                if (filter == 'all'){
+                    accordion.find('.route-point').show();
+                }
+                else{
+                    accordion.find('.route-point').hide().filter('[data-category="'+filter+'"]').show();
+                }
+            });
 
              accordion.on('shown.bs.collapse', showActive);
 

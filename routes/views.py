@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 # Create your views here.
 from core.models import Gallery
 from rentals.models import Hotel
-from routes.models import HotelRoute, HotelRoutePoint, RoutePoint
+from routes.models import HotelRoute, HotelRoutePoint, RoutePoint, Category
 
 
 def hotel_routes(request, pk, slug=None):
@@ -41,9 +41,11 @@ def create_personal_hotel_route(request, pk):
 
     hotel = get_object_or_404(Hotel, pk=pk)
     route_points = RoutePoint.objects.filter(city=hotel.city)
+    categories = Category.objects.all()
 
     return render(request, 'routes/create_route.html', {
         'hotel': hotel,
         'create_personal': True,
+        'categories':categories,
         'route_points': route_points,
     })
