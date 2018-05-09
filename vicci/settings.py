@@ -94,7 +94,7 @@ JET_SIDE_MENU_ITEMS = [  # A list of application or custom item dicts
         {'name': 'routes.category'},
         {'name': 'routes.routepoint'},
         {'name': 'routes.hotelroute'},
-        {'name': 'routes.hotelroutepoint'},
+        #{'name': 'routes.personalroute'},
     ]},
     {'label': 'Seguridad', 'items': [
         {'name': 'auth.group'},

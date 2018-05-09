@@ -35,4 +35,4 @@ class RoutePoint(models.Model):
         ordering = ['name']
 
     def __unicode__(self):
-        return self.name if self.name else ''
+        return str(self.city) + ' | ' + self.name if self.name else ''

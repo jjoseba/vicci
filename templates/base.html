@@ -1,6 +1,8 @@
 <!DOCTYPE html>
+{% load belongs_to_group %}
 {% load staticfiles %}
 {% load settings_value %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -20,33 +22,15 @@
     {% block extra_styles %}{% endblock extra_styles %}
 </head>
 <body {% block bodyattrs %}{% endblock%}>
-    <nav class="navbar fixed-top navbar-expand-lg" id="mainmenu">
-        <div class="container">
-      <a class="navbar-brand" href="#">
-        <img src="{% static 'imgs/vicci_logo_light.png' %}" alt="">
-      </a>
-      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="icon-bar"></span>
-      </button>
 
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-        <a class="collapse-brand" href="#"><img src="{% static 'imgs/vicci_logo_light.png' %}" alt=""></a>
 
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'dashboard' %}">Sei ViCCi</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Momenti ViCCi</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'cities_list' %}">Il Mondo By ViCCi</a>
-          </li>
+{%if request.user|belongs_to_group:'hotel_managers' %}
+    {% include 'navbar/navbar_hotel_manager.html' %}
+{% else %}
+    {% include 'navbar/navbar_default.html' %}
+{% endif %}
 
-        </ul>
-      </div>
-      </div>
-    </nav>
+
 
 <div id="main-content">
         {% block content %}{% endblock content %}

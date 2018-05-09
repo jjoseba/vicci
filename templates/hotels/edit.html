@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load settings_value %}
+{% load l10n %}
+
+{% block title %}{{hotel.name}} | Editar{% endblock %}
+
+{% block bodyattrs %}  {% endblock%}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/material.timepicker.css' %}" />
+{% endblock extra_styles %}
+
+{% block content %}
+
+<header class="jumbo-header py-4" {%if hotel.photo %}style="background-image: url('{{hotel.photo.url}}');"{%endif%}>
+    <div class="container">
+        <h1>Mi Hotel</h1>
+        <h3 class="mb-0">{{hotel.name}}</h3>
+    </div>
+</header>
+<div class="container mb-5 pt-4">
+
+    <form method="POST" class="post-form gallery-form" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-md-7">
+            {% include "common/forms/field.html" with field=form.name %}
+
+             {% include "common/forms/field.html" with field=form.description %}
+
+             {% include "common/forms/field.html" with field=form.address %}
+
+            {% include "common/forms/field.html" with field=form.photo %}
+        </div>
+
+        <div class="col-md-5">
+
+            <div class=" mb-5">
+
+
+                    <h4 class="card-title"><i class="material-icons">edit_location</i> Geolocalización</h4>
+
+                <div id="map" class="map no-resize loading-container">
+                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw loading-spinner"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>
+
+                    <p class="text-center px-2 pt-3">Mueve el pin por el mapa hasta posicionarlo en la localización correcta.</p>
+                    <div class="form-group">
+                        <label>Latitud</label>
+                        {{ form.latitude }}
+                        {% if form.latitude.errors %} <div class="alert alert-danger"> {{form.latitude.errors}}</div> {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>Longitud</label>
+                        {{ form.longitude }}
+                        {% if form.longitude.errors %} <div class="alert alert-danger"> {{form.longitude.errors}}</div> {% endif %}
+                    </div>
+                </div>
+
+
+            {{ gallery_formset.management_form }}
+                {% for gallery_form in gallery_formset %}
+                    <div class="gallery-form-photo file-field">
+                     {% if gallery_formset.can_delete %}
+                        {{ gallery_form.DELETE }}
+                    {% endif %}
+                        <div class="form-photo uploaded">
+                            <div class="thumb" style="background-image:url('{{gallery_form.image.value.url}}');"></div>
+                            <i class="upload material-icons" data-placement="bottom" title="Subir foto">file_upload</i>
+                            {{ gallery_form.image }}
+                        </div>
+                    {{ gallery_form.order.as_hidden }}
+                    {{ gallery_form.title.as_hidden }}
+                        </div>
+                {% endfor %}
+        </div>
+    </div>
+
+        <div class="description text-center">
+        <button type="submit" class="right-margin left-margin btn btn-primary btn-lg">{% if is_new %} Crear entidad {% else %} Guardar {% endif %}</button>
+    </div>
+    </form>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+{% include 'common/include_gmaps.html' %}
+<script type="text/javascript">
+
+    $('.gallery-form-photo').formset({
+        prefix: '{{ gallery_formset.prefix }}',
+        addText: '<i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Añadir foto">add</i></div>',
+        deleteText: '<div class="btn btn-primary btn-float btn-small" href="#!" data-toggle="tooltip" data-placement="bottom" title="Eliminar foto"><i class="material-icons">delete</i></div>',
+        added: function(row){ row.find('.form-photo').removeClass('uploaded').find('.thumb').css('background-image',''); }
+    });
+
+    function initMap() {
+{% if hotel %}
+    var entityPosition = new google.maps.LatLng({{ hotel.latitude|unlocalize }}, {{ hotel.longitude|unlocalize }});
+{% else %}
+    var entityPosition = new google.maps.LatLng({% settings_value "INITIAL_LATITUDE"|unlocalize %}, {% settings_value "INITIAL_LONGITUDE"|unlocalize %});
+{% endif %}
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 16,
+        center: entityPosition,
+        zoomControl: true,
+        scaleControl: true,
+        streetViewControl: false,
+        mapTypeControl:false
+    });
+
+    $('#map').removeClass('loading-container');
+
+    var marker = new RichMarker({
+      position: entityPosition,
+      map: map,
+      draggable:true,
+      content: '<div class="marker-wrapper"><div class="marker"><img src="' + '{%if hotel.photo %}{{hotel.photo.url}}{%else%}{% static "img/venue-icon.png" %}{%endif%}' + '"></div></div>'
+    });
+
+    var latInput = $('[name="latitude"]');
+    var lngInput = $('[name="longitude"]');
+
+    google.maps.event.addListener(
+        marker,
+        'drag',
+        function() {
+            latInput.val( marker.position.lat() );
+            lngInput.val( marker.position.lng() );
+        }
+    );
+  }
+</script>
+
+{% endblock %}

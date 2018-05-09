@@ -14,6 +14,15 @@
     </div>
 </header>
 <div class="container">
+    {% if can_edit_hotel %}
+    <div class="text-center row">
+        <div class="col-6"></div>
+        <div class="col-6">
+            <a href="{% url 'hotel_edit' pk=hotel.pk %}" class="btn btn-primary btn-action btn-lg"><i class="material-icons">edit</i></a>
+            <h4>Editar</h4>
+        </div>
+    </div>
+    {% else %}
 
     <div class="text-center row">
         <div class="col-6">
@@ -26,6 +35,7 @@
             <h4>Ver momentos</h4>
         </div>
     </div>
+    {% endif %}
 
     <hr>
     <div class="row mt-4">
@@ -55,12 +65,10 @@
         Puedes reservar directamente una bici, pero te recomendamos que selecciones uno de nuestros momentos creados
           para que tu día con ViCCi sea lo más placentero posible. O puedes componer tu propia ruta mediante nuestro
           sistema inteligente DaViCCi para creación de rutas ¡Pruébalo!
-
-
       </div>
           <div class="text-center row">
         <div class="col-6">
-            <a href="#" data-toggle="modal" data-target="#momenti-modal" class="btn btn-primary btn-action btn-lg"><img src="{% static 'imgs/davicci-icon.png' %}"> </a>
+            <a href="{% url 'create_personal_route' pk=hotel.pk %}" class="btn btn-primary btn-action btn-lg"><img src="{% static 'imgs/davicci-icon.png' %}"> </a>
             <h4>Crear mi ruta</h4>
         </div>
 

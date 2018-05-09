@@ -12,7 +12,7 @@ class ProfileForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'email', 'username', 'birth_date', 'phone_number']
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control', 'disabled':True }),
+            'username': forms.TextInput(attrs={'class': 'form-control', 'readonly':True }),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'birth_date': forms.DateInput(attrs={'class': 'form-control datepicker'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),

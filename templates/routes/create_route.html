@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load settings_value %}
+{% load l10n %}
+{% block title %}{{hotel.name}}{% endblock %}
+
+{% block bodyattrs %}  {% endblock%}
+
+{% block content %}
+
+
+<div class="route-list">
+    <div class="route-description">
+        <h2>DaViCCi - Mi momento</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    </div>
+
+    <div class="bg-light py-2 px-3">
+        <h4 class="mb-0">Mi ruta</h4>
+    </div>
+    <div id="route-summary" class="bg-light pt-0 pb-3 mb-3 px-3" style="display:none;">
+        <div class="d-inline-block">
+            <strong> Tiempo de viaje:</strong> <span class="time">24 minutos</span><br>
+            <strong> Distancia:</strong> <span class="distance">11 km</span> <br>
+        </div>
+        <a href="{%url 'hotel_book' pk=hotel.pk %}" class="btn btn-lg btn-primary align-top ml-3 float-right" style="margin-top:-20px;"><i class="material-icons mr-2">directions_bike</i>Reservar</a>
+    </div>
+
+    <div class="text-right pr-4" style="margin-bottom:-15px;">
+         <a href="#" class="btn btn-primary btn-action small" id="calculate-route" data-toggle="tooltip" data-placement="bottom" title="Calcular ruta"><i class="material-icons">directions</i></a>
+    </div>
+
+    <dív id="selected-points" class="points-list">
+        <div class="no-selected-points py-3 px-3">
+            Aún no has seleccionado ningún micromomento.
+        </div>
+    </dív>
+
+    <div class="bg-light py-2 px-3">
+        <h4 class="mb-0">Micromomentos disponibles</h4>
+    </div>
+    <div id="accordion-points" class="points-list">
+        {% for route_point in route_points %}
+      <div class="">
+        <div class="route-point" id="routepoint-heading-{{forloop.counter}}" data-pk="{{route_point.pk}}" >
+          <h5 class="mb-0">
+              <div class="description">
+                  <div class="title">{{route_point.name}}</div>
+                  <span class="route-category"> {{route_point.category}} </span>
+              </div>
+
+              <div class="actions">
+                  <button class="btn btn-link btn-show" data-toggle="collapse" data-target="#routepoint-{{forloop.counter}}" aria-expanded="true" aria-controls="collapseOne">
+                    <i class="material-icons">visibility</i>
+                    </button>
+
+                  <button class="btn btn-link btn-add" data-toggle="collapse">
+                    <i class="material-icons">add</i>
+                </button>
+
+                  <button class="btn btn-link btn-remove" data-toggle="collapse" style="display:none;">
+                    <i class="material-icons">clear</i>
+                </button>
+              </div>
+
+
+          </h5>
+        </div>
+
+        <div id="routepoint-{{forloop.counter}}" class="collapse" aria-labelledby="#routepoint-heading-{{forloop.counter}}" data-parent="#accordion-points">
+            <img src="{{route_point.photo.url}}" class="img-fluid">
+          <div class="card-body">
+            {{route_point.description|linebreaks}}
+              <hr>
+          </div>
+        </div>
+      </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<div class="map-route" id="map">
+
+</div>
+
+
+<div class="infowindow_base hidden">
+    <a class="infowindow">
+        <div class="profile-circle card">
+            <img src="">
+        </div>
+        <span class="title"></span>
+        <span class="address"></span>
+    </a>
+</div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+{% include 'common/include_gmaps.html' %}
+
+<script type="text/javascript">
+    var venue_dialog = $('#venue-dialog');
+    var map_canvas = $('#map');
+
+    var infoWindow_base = $('.infowindow_base').detach();
+    var prev_infowindow = false;
+    var noSelected = $('.no-selected-points');
+    var summary = $('#route-summary');
+    var calculateBtn = $('#calculate-route');
+
+    function initMap() {
+
+            function routeChange(){
+                directionsDisplay.setDirections({routes: []});
+                summary.hide();
+                calculateBtn.show();
+            }
+
+            function showActive(){
+                var route = $('.collapse.show').prev();
+                var routeId = route.attr('data-pk');
+
+                for (marker of route_points){
+                    if (marker['pk'] == routeId){
+                        marker.setVisible(true);
+                        var pin = $(marker.getContent()).addClass('active');
+                        marker.setContent(pin[0]);
+                    }
+                }
+            }
+
+            function updateSummary(response){
+                var distance = 0;
+                var time = 0;
+                for (leg of response.routes[0].legs){
+                    distance += leg.distance.value;
+                    time += leg.duration.value;
+                }
+                time = Math.round(time/60);
+                var duration =  (time > 59) ? (  Math.round(time/60) + ' hora(s) y ') : '' + Math.round(time%60) + ' minutos';
+                summary.find('.time').text(duration).attr('data-value', time);
+                summary.find('.distance').text((distance / 1000).toFixed(2) + " Km").attr('data-value', distance);
+                summary.fadeIn();
+                calculateBtn.hide();
+
+            }
+
+            calculateBtn.on('click', function(){
+                if (select_points.length <= 1) return;
+
+                var waypoints = [];
+                for (var i=1; i<select_points.length; i++){
+                    waypoints.push({
+                        'location': select_points[i].getPosition(),
+                        'stopover':true
+                    });
+                }
+
+                directionsService.route({
+                       origin:select_points[0].getPosition(),
+                       destination: select_points[0].getPosition(),
+                        waypoints: waypoints,
+                        optimizeWaypoints: true,
+                        travelMode: 'BICYCLING'
+                    }, function(response, status) {
+                  if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                    updateSummary(response);
+
+                  } else {
+                    window.alert('Directions request failed due to ' + status);
+                  }
+                });
+
+            });
+
+            var accordion = $('#accordion-points');
+            var selected = $('#selected-points');
+
+             accordion.on('shown.bs.collapse', showActive);
+
+            accordion.on('hide.bs.collapse', function(){
+                for (marker of route_points){
+                    marker.setVisible(false);
+                    var pin = $(marker.getContent()).removeClass('active');
+                    marker.setContent(pin[0]);
+                }
+                for (marker of select_points){
+                    marker.setVisible(true);
+                }
+            });
+
+            accordion.on('click', '.btn-add',  function(){
+                var route = $(this).parents('.route-point');
+                var routeId = route.attr('data-pk');
+                var selectedMarker = null;
+                for (marker of route_points){
+                    if (marker['pk'] == routeId){
+                        marker.setVisible(true);
+                        selectedMarker = marker;
+                    }
+                }
+                var found = false;
+                for (marker of select_points){
+                    if (marker['pk'] == selectedMarker['pk']){
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found){
+                    select_points.push(selectedMarker);
+                    selected.append(route.clone().find('.btn').hide().end().find('.btn-remove').show().end());
+                    routeChange();
+                    noSelected.hide();
+                }
+            });
+
+             $('#selected-points').on('click', '.btn-remove',  function(){
+                var route = $(this).parents('.route-point');
+                var routeId = route.attr('data-pk');
+                var selectedMarker = null;
+                var markerPosition = 0;
+                for (markerPosition=0; markerPosition<select_points.length; markerPosition++){
+                    marker = select_points[markerPosition];
+                    if (marker['pk'] == routeId){
+                        marker.setVisible(false);
+                        selectedMarker = marker;
+                        break;
+                    }
+                }
+                if (selectedMarker != null){
+                    showActive();
+                    route.remove();
+                    select_points.splice(markerPosition, 1);
+                    routeChange();
+                    if (select_points.length <= 1){
+                        noSelected.show();
+                    }
+                }
+
+            });
+
+            map = new google.maps.Map(map_canvas[0], {
+                zoomControl: true,
+                scaleControl: false,
+                streetViewControl: false,
+                scaleControl:false,
+                styles: vicciMapStyle,
+                mapTypeControl:false
+            });
+            map_canvas.removeClass('loading-container');
+
+            var bounds = new google.maps.LatLngBounds();
+            var route_points = [];
+            var select_points = [];
+
+            {% for route_point in route_points %}
+
+              var venuePosition{{forloop.counter}} = new google.maps.LatLng({{ route_point.latitude|unlocalize }}, {{ route_point.longitude|unlocalize }});
+              var image{{forloop.counter}} = "{{route_point.photo.url}}";
+
+              //route_points.push({ 'location': venuePosition{{forloop.counter}}, 'stopover':true} );
+
+              windowContent{{forloop.counter}} = infoWindow_base.clone()
+                    .find('.title').text('{{ route_point.name }}').end()
+                    .find('.address').text('').end()
+                    .find('img').attr('src', image{{forloop.counter}}).end()
+
+
+              // A new Info Window is created and set content
+              var infowindow = new google.maps.InfoWindow({
+                content: windowContent{{forloop.counter}}.html(),
+                maxWidth: 350
+              });
+
+              var marker = new RichMarker({
+                  position: venuePosition{{forloop.counter}},
+                  map: map,
+                  content: '<div class="marker-wrapper"><div class="marker"><img src="' + image{{forloop.counter}} + '"></div></div>'
+                });
+
+                //extend the bounds to include each marker's position
+                bounds.extend(marker.position);
+                marker['pk'] = '{{route_point.pk}}';
+                marker.visible = false;
+                route_points.push(marker);
+
+              google.maps.event.addListener(marker, 'click', (function(marker,infowindow){
+                    return function() {
+                        if( prev_infowindow ) {
+                           prev_infowindow.close();
+                        }
+                        prev_infowindow = infowindow;
+                        infowindow.open(map,marker);
+                    };
+                })(marker,infowindow));
+
+            {% endfor %}
+
+
+
+
+            var directionsService = new google.maps.DirectionsService;
+           var directionsDisplay = new google.maps.DirectionsRenderer({
+            polylineOptions: {
+              strokeColor: "#cf821c"
+            }
+          });
+           directionsDisplay.setMap(map);
+
+            var hotelPosition = new google.maps.LatLng({{ hotel.latitude|unlocalize }}, {{hotel.longitude|unlocalize }});
+
+              windowContentHotel = infoWindow_base.clone()
+                                .find('.title').text('{{ route.hotel.name }}').end()
+                                .find('.address').text('').end()
+
+            var hotelImage = '{%if hotel.photo %}{{hotel.photo.url}}{%endif%}';
+
+              // A new Info Window is created and set content
+              var infowindow = new google.maps.InfoWindow({
+                content: windowContentHotel.html(),
+                maxWidth: 350
+              });
+
+              var marker = new RichMarker({
+                  position: hotelPosition,
+                  map: map,
+                  content: '<div class="marker-wrapper"><div class="marker"><img src="{{hotel.photo.url}}"></div></div>'
+                });
+
+                select_points.push(marker);
+
+                //extend the bounds to include each marker's position
+                bounds.extend(marker.position);
+
+
+            map.fitBounds(bounds);
+
+
+      }
+</script>
+{% endblock scripts %}
