@@ -232,6 +232,7 @@ color:#efb62f;
     opacity: 0;
 }
 .file-field input[type=file]:hover{ cursor:pointer;}
+
 .file-field .profile-circle{
     width:100px;
     height:100px;
@@ -492,7 +493,7 @@ footer a, footer a:hover{
     position:fixed;
     bottom:0;
     right:0;
-    padding:1.3rem;
+    margin:1.3rem;
     z-index:100;
 }
 .toast-messages .toast{
@@ -649,15 +650,31 @@ display:block;
     height:45px;
     width:45px;
 }
+.infowindow .profile-circle{
+    overflow: hidden;
+    text-align:center;
+    border-radius: 50%;
+    border: 2px solid #fdfdfd;
+    background-color:#ddd;
+}
+.infowindow .profile-circle.small{
+    width:90px;
+    height:90px;
+}
+.infowindow .profile-circle img {
+    display: inline;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+}
 .infowindow:hover{
     text-decoration:none;
 }
 .infowindow{
     font-weight: 500;
     color:#347289;
-    font-size:15px;
-    font-family: 'Oswald', Helvetica, Arial, Lucida, sans-serif;
-    text-transform: uppercase;
+    font-size:12px;
+    background:#ff0000;
 }
 .infowindow .title, .infowindow .address, .infowindow span{
     display:block;

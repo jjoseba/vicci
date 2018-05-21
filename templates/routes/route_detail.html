@@ -51,20 +51,7 @@
 
 </div>
 
-
-<div class="infowindow_base hidden">
-    <a class="infowindow">
-        <div class="profile-circle card">
-            <img src="">
-        </div>
-        <span class="title"></span>
-        <span class="address"></span>
-    </a>
-</div>
-
 {% endblock %}
-
-
 
 {% block scripts %}
 {% include 'common/include_gmaps.html' %}
@@ -72,11 +59,6 @@
 <script type="text/javascript">
     var venue_dialog = $('#venue-dialog');
     var map_canvas = $('#map');
-
-    var infoWindow_base = $('.infowindow_base');
-    var prev_infowindow = false;
-
-
 
     function initMap() {
 
@@ -95,80 +77,29 @@
             var directionsService = new google.maps.DirectionsService;
            var directionsDisplay = new google.maps.DirectionsRenderer({
            suppressMarkers: true,
-    polylineOptions: {
-      strokeColor: "#cf821c"
-    }
-  });
+              polylineOptions: { strokeColor: "#cf821c" }
+            });
            directionsDisplay.setMap(map);
 
             var hotelPosition = new google.maps.LatLng({{ route.hotel.latitude|unlocalize }}, {{route.hotel.longitude|unlocalize }});
-
-              windowContentHotel = infoWindow_base.clone()
-                                .find('.title').text('{{ route.hotel.name }}').end()
-                                .find('.address').text('').end()
-
-            var hotelImage = '{{route.hotel.photo.url}}';
-
-              // A new Info Window is created and set content
-              var infowindow = new google.maps.InfoWindow({
-                content: windowContentHotel.html(),
-                maxWidth: 350
-              });
-
-
-              var marker = new RichMarker({
-                  position: hotelPosition,
-                  map: map,
-                  content: '<div class="marker-wrapper"><div class="marker"><img src="{{route.hotel.photo.url}}"></div></div>'
-                });
-
-                //extend the bounds to include each marker's position
-                bounds.extend(marker.position);
-
-            var waypoints = [];
+            createMarker(map, hotelPosition, {
+                    title:'{{ route.hotel.name }}',
+                    address:'{{ route.hotel.address }}',
+                    img:'{{route.hotel.photo.url}}'
+                }, true, false);
 
             {% for point in route_points %}
 
               var venuePosition{{forloop.counter}} = new google.maps.LatLng({{ point.route_point.latitude|unlocalize }}, {{ point.route_point.longitude|unlocalize }});
-              var image{{forloop.counter}} = "{{point.route_point.photo.url}}";
-
-              waypoints.push({ 'location': venuePosition{{forloop.counter}}, 'stopover':true} );
-
-              windowContent{{forloop.counter}} = infoWindow_base.clone()
-                                .find('.title').text('{{ point.route_point.name }}').end()
-                                .find('.address').text('').end()
-                                .find('img').attr('src', image{{forloop.counter}}).end()
-
-
-              // A new Info Window is created and set content
-              var infowindow = new google.maps.InfoWindow({
-                content: windowContent{{forloop.counter}}.html(),
-                maxWidth: 350
-              });
-
-
-              var marker = new RichMarker({
-                  position: venuePosition{{forloop.counter}},
-                  map: map,
-                  content: '<div class="marker-wrapper"><div class="marker"><img src="' + image{{forloop.counter}} + '"></div></div>'
-                });
-
-                //extend the bounds to include each marker's position
-                bounds.extend(marker.position);
-
-              google.maps.event.addListener(marker, 'click', (function(marker,infowindow){
-                    return function() {
-                        if( prev_infowindow ) {
-                           prev_infowindow.close();
-                        }
-                        prev_infowindow = infowindow;
-                        infowindow.open(map,marker);
-                    };
-                })(marker,infowindow));
+              createMarker(map, venuePosition{{forloop.counter}}, {
+                    title:'{{ point.route_point.name }}',
+                    address:'{{ point.route_point.address }}',
+                    img:'{{point.route_point.photo.url}}'
+                }, true, true);
 
             {% endfor %}
 
-            map.fitBounds(bounds);
+           fitBoundsToMarkers(map, true);
 
             directionsService.route({
                origin:hotelPosition,
@@ -183,9 +114,6 @@
             window.alert('Directions request failed due to ' + status);
           }
         });
-
-            //now fit the map to the newly inclusive bounds
-
 
       }
 </script>

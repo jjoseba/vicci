@@ -119,8 +119,6 @@
 
 {% endblock %}
 
-
-
 {% block scripts %}
 {% include 'common/include_gmaps.html' %}
 
@@ -133,8 +131,6 @@
     var noSelected = $('.no-selected-points');
     var summary = $('#route-summary');
     var calculateBtn = $('#calculate-route');
-
-
 
     function initMap() {
 
@@ -151,8 +147,8 @@
                 for (marker of route_points){
                     if (marker['pk'] == routeId){
                         marker.setVisible(true);
-                        var pin = $(marker.getContent()).addClass('active');
-                        marker.setContent(pin[0]);
+                        setActive(map, marker, true);
+                        centerMap(map, marker);
                     }
                 }
             }
@@ -170,7 +166,11 @@
                 summary.find('.distance').text((distance / 1000).toFixed(2) + " Km").attr('data-value', distance);
                 summary.fadeIn();
                 calculateBtn.hide();
+            }
 
+            function markerSelected(marker){
+                var route = accordion.find('[data-pk="' + marker['pk'] + '"] .btn-show').click();
+                console.log(route);
             }
 
             calculateBtn.on('click', function(){
@@ -205,10 +205,8 @@
             var accordion = $('#accordion-points');
             var selected = $('#selected-points');
 
-
             $('input[name="filter_points"]').on('change', function(){
                 filter = $(this).val();
-                console.log($(this).val());
                 if (filter == 'all'){
                     accordion.find('.route-point').show();
                 }
@@ -217,17 +215,18 @@
                 }
             });
 
-             accordion.on('shown.bs.collapse', showActive);
+            accordion.on('shown.bs.collapse', showActive);
 
             accordion.on('hide.bs.collapse', function(){
                 for (marker of route_points){
-                    marker.setVisible(false);
-                    var pin = $(marker.getContent()).removeClass('active');
-                    marker.setContent(pin[0]);
+                    hideMarker(map, marker);
+                    setActive(map, marker, false);
                 }
                 for (marker of select_points){
                     marker.setVisible(true);
                 }
+
+                fitBoundsToMarkers(map, (select_points.length == 0));
             });
 
             accordion.on('click', '.btn-add',  function(){
@@ -253,6 +252,7 @@
                     selected.append(route.clone().find('.btn').hide().end().find('.btn-remove').show().end());
                     routeChange();
                     noSelected.hide();
+                    fitBoundsToMarkers(map, false);
                 }
             });
 
@@ -264,7 +264,7 @@
                 for (markerPosition=0; markerPosition<select_points.length; markerPosition++){
                     marker = select_points[markerPosition];
                     if (marker['pk'] == routeId){
-                        marker.setVisible(false);
+                        hideMarker(map, marker);
                         selectedMarker = marker;
                         break;
                     }
@@ -291,57 +291,35 @@
             });
             map_canvas.removeClass('loading-container');
 
-            var bounds = new google.maps.LatLngBounds();
+
             var route_points = [];
             var select_points = [];
+
+            var hotelPosition = new google.maps.LatLng({{ hotel.latitude|unlocalize }}, {{hotel.longitude|unlocalize }});
+
+            var marker = createMarker(map, hotelPosition, {
+                    title:'{{ hotel.name }}',
+                    address:'{{ hotel.address }}',
+                    img:'{{hotel.photo.url}}'
+                }, true, false);
+            select_points.push(marker);
 
             {% for route_point in route_points %}
 
               var venuePosition{{forloop.counter}} = new google.maps.LatLng({{ route_point.latitude|unlocalize }}, {{ route_point.longitude|unlocalize }});
-              var image{{forloop.counter}} = "{{route_point.photo.url}}";
+              var marker = createMarker(map, venuePosition{{forloop.counter}}, {
+                    title:'{{ route_point.name }}',
+                    address:'{{ route_point.address }}',
+                    img:'{{ route_point.photo.url }}',
+                    pk: '{{ route_point.pk }}'
+                }, false, true, markerSelected);
 
-              //route_points.push({ 'location': venuePosition{{forloop.counter}}, 'stopover':true} );
-
-              windowContent{{forloop.counter}} = infoWindow_base.clone()
-                    .find('.title').text('{{ route_point.name }}').end()
-                    .find('.address').text('').end()
-                    .find('img').attr('src', image{{forloop.counter}}).end()
-
-
-              // A new Info Window is created and set content
-              var infowindow = new google.maps.InfoWindow({
-                content: windowContent{{forloop.counter}}.html(),
-                maxWidth: 350
-              });
-
-              var marker = new RichMarker({
-                  position: venuePosition{{forloop.counter}},
-                  map: map,
-                  content: '<div class="marker-wrapper"><div class="marker"><img src="' + image{{forloop.counter}} + '"></div></div>'
-                });
-
-                //extend the bounds to include each marker's position
-                bounds.extend(marker.position);
-                marker['pk'] = '{{route_point.pk}}';
-                marker.visible = false;
-                route_points.push(marker);
-
-              google.maps.event.addListener(marker, 'click', (function(marker,infowindow){
-                    return function() {
-                        if( prev_infowindow ) {
-                           prev_infowindow.close();
-                        }
-                        prev_infowindow = infowindow;
-                        infowindow.open(map,marker);
-                    };
-                })(marker,infowindow));
+               route_points.push(marker);
 
             {% endfor %}
 
 
-
-
-            var directionsService = new google.maps.DirectionsService;
+           var directionsService = new google.maps.DirectionsService;
            var directionsDisplay = new google.maps.DirectionsRenderer({
            suppressMarkers: true,
             polylineOptions: {
@@ -350,33 +328,7 @@
           });
            directionsDisplay.setMap(map);
 
-            var hotelPosition = new google.maps.LatLng({{ hotel.latitude|unlocalize }}, {{hotel.longitude|unlocalize }});
-
-              windowContentHotel = infoWindow_base.clone()
-                                .find('.title').text('{{ route.hotel.name }}').end()
-                                .find('.address').text('').end()
-
-            var hotelImage = '{%if hotel.photo %}{{hotel.photo.url}}{%endif%}';
-
-              // A new Info Window is created and set content
-              var infowindow = new google.maps.InfoWindow({
-                content: windowContentHotel.html(),
-                maxWidth: 350
-              });
-
-              var marker = new RichMarker({
-                  position: hotelPosition,
-                  map: map,
-                  content: '<div class="marker-wrapper"><div class="marker"><img src="{{hotel.photo.url}}"></div></div>'
-                });
-
-                select_points.push(marker);
-
-                //extend the bounds to include each marker's position
-                bounds.extend(marker.position);
-
-
-            map.fitBounds(bounds);
+           fitBoundsToMarkers(map, false);
 
 
       }
