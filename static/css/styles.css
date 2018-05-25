@@ -336,7 +336,7 @@ color:#efb62f;
 		width:100%;
 		text-align: center;
 	}
-	#mainmenu .nav-item .nav-link{ padding: 1.8em 0; font-size: 1.4rem;}
+	#mainmenu .nav-item .nav-link{ padding: 1.4em 0; font-size: 1.4rem;}
 	.navbar-nav {
 	    height: 50vh;
 	    font-size: 1.8em;
@@ -551,8 +551,15 @@ footer a, footer a:hover{
 }
 
 
+.city-list h2{
+    font-size: 1.6125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+        color: #cf821c;
+}
+.city-list .city-description{
 
-
+}
 .route-point{
     padding:0.4rem 1rem;
     border-bottom:1px solid #ddd;

@@ -188,6 +188,9 @@ function createMarker(map, latlng, info, visible, is_waypoint, marker_callback){
             }
             prev_infowindow = infowindow;
             this.infowindow.open(map, this);
+
+             console.log(marker_callback);
+
             if ((marker_callback) && ( typeof marker_callback == 'function')){
                 marker_callback(marker);
             }
@@ -221,7 +224,8 @@ function fitBoundsToMarkers(map, only_visible){
     }
 
     if (visibleCount > 0){
-        map.fitBounds(bounds);
+        map.fitBounds(bounds, 50);
+
     }
 }
 

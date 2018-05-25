@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 from core.models import Gallery
-from rentals.models import Hotel
+from rentals.models import Hotel, City
 from routes.models import HotelRoute, HotelRoutePoint, RoutePoint, Category
 
 
@@ -34,6 +34,14 @@ def route_detail(request, pk):
     return render(request, 'routes/route_detail.html', {
         'route': route,
         'route_points': route_points,
+    })
+
+def davicci(request):
+
+    cities = City.objects.all().prefetch_related('hotels')
+
+    return render(request, 'routes/davicci.html', {
+        'cities': cities,
     })
 
 

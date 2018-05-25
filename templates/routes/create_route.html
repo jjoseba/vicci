@@ -162,7 +162,10 @@
                 }
                 time = Math.round(time/60);
                 var duration =  (time > 59) ? (  Math.round(time/60) + ' hora(s) y ') : '' + Math.round(time%60) + ' minutos';
-                summary.find('.time').text(duration).attr('data-value', time);
+
+                //summary.find('.time').text(duration).attr('data-value', time);
+                console.log(select_points);
+                summary.find('.time').text(select_points.length > 4 ? 'Momento completo' : 'Medio momento');
                 summary.find('.distance').text((distance / 1000).toFixed(2) + " Km").attr('data-value', distance);
                 summary.fadeIn();
                 calculateBtn.hide();
