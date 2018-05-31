@@ -44,6 +44,11 @@ def davicci(request):
         'cities': cities,
     })
 
+def momenti(request):
+
+
+    return render(request, 'routes/momenti.html', {
+    })
 
 def create_personal_hotel_route(request, pk):
 
