@@ -336,7 +336,22 @@ color:#efb62f;
 		width:100%;
 		text-align: center;
 	}
+
+@keyframes continuos-rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 	#mainmenu .nav-item .nav-link{ padding: 1.4em 0; font-size: 1.4rem;}
+	#mainmenu .nav-item .btn-action{ margin-top:1.5rem;  }
+	#mainmenu .nav-item .btn-action:hover{
+	 animation: continuos-rotate 3.5s linear infinite;
+    -webkit-animation: continuos-rotate 3.5s linear infinite;
+	}
 	.navbar-nav {
 	    height: 50vh;
 	    font-size: 1.8em;
@@ -719,4 +734,43 @@ display:block;
 .route-list::-webkit-scrollbar-thumb {
   background-color: #ddd;
   border-radius:0.3em;
+}
+
+section.momenti-panel{
+    padding-top: 10vh;
+    padding-bottom: 10vh;
+    background:#444;
+    color:#fff;
+    clear:both;
+    text-align:justify;
+    overflow:hidden;
+    position:relative;
+    text-shadow: 0 0 21px #000;
+}
+section.momenti-panel.right{
+    padding-right:3rem;
+}
+section.momenti-panel.left{
+    padding-left:3rem;
+}
+.momenti-bg{
+    height:100vh;
+    position:absolute;
+    background-size:cover;
+    background-attachment:fixed;
+    background-position:center;
+    width:100%;
+    opacity:0.25;
+    top:0;
+    z-index:0;
+    left:0;
+}
+.momenti-panel .container{ overflow:auto; z-index:10; position:relative;}
+.momenti-panel h2{ color: #efb62f; }
+section.momenti-panel.right .content{ float:right; }
+section.momenti-panel.left .content{ float:left; }
+section.momenti-panel .content{
+    max-width:600px;
+    padding-left:2rem;
+    padding-right:2rem;
 }
