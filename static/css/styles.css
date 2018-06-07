@@ -347,11 +347,11 @@ color:#efb62f;
 }
 
 	#mainmenu .nav-item .nav-link{ padding: 1.4em 0; font-size: 1.4rem;}
-	#mainmenu .nav-item .btn-action{ margin-top:1.5rem;  }
-	#mainmenu .nav-item .btn-action:hover{
+	#mainmenu .nav-item .btn-action{ margin-top:1.5rem;
 	 animation: continuos-rotate 3.5s linear infinite;
     -webkit-animation: continuos-rotate 3.5s linear infinite;
-	}
+    }
+
 	.navbar-nav {
 	    height: 50vh;
 	    font-size: 1.8em;

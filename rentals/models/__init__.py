@@ -1,3 +1,4 @@
 from city import City
 from hotel import Hotel
-from rental import Rental
+from bike import Bike
+from rental import Rental, RentalBike

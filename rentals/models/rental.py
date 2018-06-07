@@ -11,7 +11,7 @@ from pilkit.processors import ResizeToFit, ResizeToFill
 
 from core.models import Gallery, User
 from helpers import RandomFileName
-from rentals.models import City, Hotel
+from rentals.models import City, Hotel, Bike
 
 STATUS_ACCEPTED = 'accepted'
 STATUS_CANCELLED = 'cancelled'
@@ -38,6 +38,7 @@ class Rental(models.Model):
     duration = models.DurationField(default=0, verbose_name=_('Duración'))
     status = models.CharField(max_length=12, choices=PAYMENT_STATUS, verbose_name=_('Estado'))
     total_amount = models.FloatField(default=0, verbose_name='Importe total')
+    day_complete = models.BooleanField(default=False, verbose_name=_('Día completo'))
 
 
     class Meta:
@@ -48,3 +49,17 @@ class Rental(models.Model):
 
     def __unicode__(self):
         return self.hotel.name + ' | ' + str(self.day) + ' - ' + str(self.time)
+
+
+class RentalBike(models.Model):
+
+    rental = models.ForeignKey(Rental, verbose_name=_('Reserva'), blank=False, null=False, related_name='bikes')
+    full_name = models.TextField(null=False, blank=False, verbose_name=_('Nombre completo'))
+    nif = models.CharField(null=False, blank=False, max_length=20, verbose_name=_('DNI/NIF'))
+    birthdate = models.DateField(null=False, blank=False, verbose_name=_('Fecha de nacimiento'))
+    bike = models.ForeignKey(Bike, null=False, related_name='rentals')
+
+
+    class Meta:
+        verbose_name = _('Persona reserva')
+        verbose_name_plural = _('Personas reserva')
