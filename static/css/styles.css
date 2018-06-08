@@ -1,6 +1,5 @@
 h1,h2,h3,h4{
 	font-family: 'Dosis', sans-serif;
-
 }
 
 .img-circle{
@@ -62,8 +61,13 @@ h1,h2,h3,h4{
 .main-bg footer{
     background-color:rgba(25,25,25,0.7);
 }
-
-
+.emph{
+    font-family: 'Dosis', sans-serif;
+}
+.lead{
+    font-family: 'Dosis', sans-serif;
+    font-weight: bold;
+}
 .gallery{ overflow:auto; clear:both;}
 .gallery > a{
     float:left;
@@ -773,4 +777,51 @@ section.momenti-panel .content{
     max-width:600px;
     padding-left:2rem;
     padding-right:2rem;
+}
+
+.section-header{
+    margin-bottom:1rem;
+    text-transform:uppercase;
+    color: #cf821c;
+}
+
+.section-header .header-icon{
+    height: 60px;
+    width: 60px;
+    min-width: 0;
+    border-radius: 50%;
+    line-height: 55px;
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+    border:2px solid #cf821c;
+    display:inline-block;
+    margin-left:-10px;
+}
+.section-header .header-icon i{
+    font-size: 33px;
+}
+.section-header h4{
+    display:inline-block;
+    padding-bottom:0.5rem;
+    margin-left:0.5rem;
+    border-bottom:2px solid #cf821c;
+    padding-right:2em;
+}
+
+.viaggatore{
+    position:relative;
+    padding-left:60px;
+    margin-top:15px;
+    padding-bottom:20px;
+    border-bottom:1px solid #aaa;
+    margin-bottom:15px;
+}
+.viaggatore > i{
+    position:absolute;
+    top:50%;
+    left:0;
+    margin-top:-20px;
+    color:#777;
+    font-size:40px;
 }

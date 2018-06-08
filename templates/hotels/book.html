@@ -37,9 +37,15 @@
       </div>
 </div>
 
-    <label for="exampleInputDatePicker1">Selecciona el día:</label>
-<input class="form-control" id="exampleInputDatePicker1" placeholder="Fecha" type="text">
+<div class="row">
+    <div class="col-md-6 mb-5">
+        <div class="section-header">
+            <div class="header-icon"><i class="material-icons">calendar_today</i></div>
+            <h4>Cuándo</h4>
+        </div>
 
+            <label for="exampleInputDatePicker1">Selecciona el día:</label>
+            <input class="form-control" id="exampleInputDatePicker1" placeholder="Fecha" type="text">
 
     <div class="form-group mt-4">
 
@@ -47,25 +53,70 @@
         <input class="form-control" id="hour-input" placeholder="Hora de recogida" type="text">
 
     </div>
-<div class="text-center mt-4">
-    <h4>Tiempo</h4>
-    <div class="btn-group" data-toggle="buttons" role="group">
-      <label class="btn btn-outline btn-lg active">
-        <input autocomplete="off" name="options1" type="radio">
-        2 horas<br><span class="small mt-2 d-block"> 10€</span>
-      </label>
-      <label class="btn btn-outline btn-lg">
-        <input autocomplete="off" name="options1" type="radio">
-        5 horas<br><span class="small mt-2 d-block"> 10€</span>
-      </label>
-      <label class="btn btn-outline btn-lg">
-        <input autocomplete="off" name="options1" type="radio">
-        10 horas<br><span class="small mt-2 d-block"> 10€</span>
-      </label>
+
+            <div class="text-center mt-4">
+         <h4>Tiempo</h4>
+        <div class="btn-group" data-toggle="buttons" role="group">
+          <label class="btn btn-outline btn-lg">
+            <input autocomplete="off" name="options1" type="radio">
+            medio<br>MOMENTI<br><span class="small mt-2 d-block emph">3 horas</span><br>30€
+          </label>
+          <label class="btn btn-outline btn-lg active">
+            <input autocomplete="off" name="options1" type="radio">
+            MOMENTI<br>completo<br><span class="small mt-2 d-block emph">Día completo</span><br>42€
+          </label>
+
+        </div>
+
     </div>
-    <br><br><br>
-    <button type="submit" class="btn btn-primary btn-lg">Reservar</button>
+
+    </div>
+
+    <div class="col-md-6">
+        <div class="section-header">
+            <div class="header-icon"><i class="material-icons">directions_walk</i></div>
+            <h4>Quién</h4>
+        </div>
+
+        <small>Explicación de por qué se piden datos personales - Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.</small>
+
+        <div>
+        <div class="viaggatore">
+            <i class="material-icons">directions_bike</i>
+            <div class="form-group">
+                <div class="floating-label">
+                    <label for="id_fullname1">Nombre y apellidos</label>
+                    <input type="text" name="username" id="id_fullname1" autofocus="" required="" class="form-control" maxlength="150">
+                 </div>
+             </div>
+
+            <div class="form-group">
+                <div class="floating-label">
+                    <label for="nif">DNI/NIF/NIE</label>
+                    <input type="text" name="nif" id="nif" autofocus="" required="" class="form-control" maxlength="150">
+                 </div>
+             </div>
+
+            <div class="form-group">
+                <div class="floating-label">
+                    <label for="birthdate">Fecha de nacimiento</label>
+                    <input type="text" name="birthdate" id="birthdate" autofocus="" required="" class="form-control" maxlength="150">
+                 </div>
+             </div>
+        </div>
+            </div>
+        <div class="text-right">
+            <button class="btn btn-secondary btn-lg add-bike"><i class="material-icons">add</i> Añadir viaggatore</button>
+        </div>
+
+
+    </div>
 </div>
+
+    <div class="text-center mt-3">
+         <br><br><br>
+    <button type="submit" class="btn btn-primary btn-lg">Reservar</button>
+    </div>
 
 <br><br><br><br><br><br>
 </div>
@@ -111,6 +162,12 @@
 
     var timepicker = new TimePicker.TimePicker();
     timepicker.bindInput('#hour-input');
+
+    var bike = $('.viaggatore').clone();
+    $('.add-bike').on('click', function(){
+        $('.viaggatore').parent().append(bike.clone());
+    });
+
     });
 </script>
 
